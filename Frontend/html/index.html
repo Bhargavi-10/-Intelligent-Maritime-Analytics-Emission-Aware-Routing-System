@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maritime Supply Chain</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<h1>Maritime Supply Chain Prediction And Optimization System</h1>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <ul>
+        <li id="homeBtn" class="menu-item active">Home</li>
+        <li id="optimizeBtn" class="menu-item">Optimal Route</li>
+        <li id="co2Btn" class="menu-item">Predict CO2</li>
+        <li id="analyticsBtn" class="menu-item">Analytics</li>
+        <li id="outliersBtn" class="menu-item">Outliers</li>
+        <li class="menu-item" id="performanceBtn"> Model Performance</li>
+        <li id="datasetBtn" class="menu-item">Dataset</li>
+    </ul>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+<!-- HOME -->
+<section id="home" class="content-section active">
+    <h2>Fleet Overview</h2>
+    <div class="fleet-cards">
+        <div class="card ships">
+            <h3>Ships</h3>
+            <p id="uniqueShips"></p>
+        </div>
+        <div class="card distance">
+            <h3>Avg Distance</h3>
+            <p id="avgDistance"></p>
+        </div>
+        <div class="card fuel">
+            <h3>Avg Fuel</h3>
+            <p id="avgFuel"></p>
+        </div>
+        <div class="card co2">
+            <h3>Avg CO2</h3>
+            <p id="avgCO2"></p>
+        </div>
+    </div>
+
+
+    <!-- ROW 2 -->
+    <div class="row">
+        <canvas id="homeFuelDonut" class="Donut"></canvas>
+        <canvas id="homeShipDonut" class="Donut"></canvas>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="row">
+        <canvas id="homeWeatherDonut" class="Donut"></canvas>
+        <canvas id="homeRouteDonut"  class="Donut"></canvas>
+    </div>
+
+        <!-- SHIP TYPES -->
+    <div class="ship-types">
+        <div class="ship-card cargo">
+            <h3>Tanker Ship</h3>
+            <p>Large vessels designed to transport liquid bulk cargo such as crude oil, petroleum products, or chemicals. They are critical to global energy supply chains and optimized for safe, high-volume transport across long distances.</p>
+        </div>
+        <div class="ship-card tanker">
+            <h3>Fishing Trawler</h3>
+            <p>Fishing trawlers feed the seafood supply chain by harvesting fish at scale. They connect ocean resources to processing plants and distribution networks. Their role highlights primary resource extraction, where catch volumes, fuel use, and route efficiency influence both sustainability and market availability
+</p>
+        </div>
+        <div class="ship-card fishing">
+            <h3>Surfer Boat</h3>
+            <p>Surfer boats, though smaller, play a role in last-mile maritime logistics. They are agile vessels used for coastal transport, recreation, and sometimes patrol or inspection. In the supply chain, they symbolize short-distance, flexible operations, bridging gaps between ports, offshore facilities, and local communities
+</p>
+        </div>
+        <div class="ship-card service">
+            <h3>Oil Service Boat</h3>
+            <p>Oil service boats are critical support vessels for offshore drilling platforms. They deliver crew, spare parts, and equipment, ensuring uninterrupted energy production. Within the supply chain, they represent support and maintenance logistics, enabling upstream operations to function smoothly and keeping the energy flow consistent
+</p>
+        </div>
+    </div>
+</section>
+
+<!-- OPTIMIZE -->
+<section id="optimize" class="content-section">
+<h2>Optimize Route</h2>
+
+<form id="optimizeForm">
+
+<label><b>Fuel Type</b></label>
+<div class="radio-group">
+    <div class="radio-option">
+        <input type="radio" name="fuel_type" value="HFO" required>
+        <span>HFO</span>
+    </div>
+    <div class="radio-option">
+        <input type="radio" name="fuel_type" value="DIESEL">
+        <span>Diesel</span>
+    </div>
+</div>
+
+<label><b>Distance (km):</b></label>
+<input type="number" name="distance" placeholder="Distance(20.08 km - 498.55 km)" step="any"  required>
+<label><b>Engine Efficiency (%):</b></label>
+<input type="number" name="engine_efficiency" placeholder="Engine Efficiency(70.01%-94.98%)" step="any"  required>
+
+<button type="submit">Optimize</button>
+</form>
+
+<div id="optimizeResult"></div>
+<canvas id="optimizeChart"></canvas>
+</section>
+
+<!-- CO2 -->
+<section id="co2" class="content-section">
+   <h2>Predict CO2</h2>
+
+   <div class="row">
+      <!-- Left column: Form -->
+      <div>
+         <form id="co2Form">
+            <label><b>Distance (km):</b></label>
+            <input type="number" name="distance" placeholder="Distance(20.08km - 498.55 km)" step="any" required>
+
+            <label><b>Fuel Type</b></label>
+            <div class="radio-group">
+               <div class="radio-option">
+                  <input type="radio" name="fuel_type" value="HFO" required>
+                  <span>HFO</span>
+               </div>
+               <div class="radio-option">
+                  <input type="radio" name="fuel_type" value="DIESEL">
+                  <span>Diesel</span>
+               </div>
+            </div>
+            <label><b>Weather</b></label>
+            <select name="weather_conditions" required>
+               <option value="">Weather</option>
+               <option value="calm">Calm</option>
+               <option value="moderate">Moderate</option>
+               <option value="stormy">Stormy</option>
+            </select>
+
+            <label><b>Month</b></label>
+            <select name="month" required>
+               <option value="">Select Month</option>
+               <option value="January">January</option>
+               <option value="February">February</option>
+               <option value="March">March</option>
+               <option value="April">April</option>
+               <option value="May">May</option>
+               <option value="June">June</option>
+               <option value="July">July</option>
+               <option value="August">August</option>
+               <option value="September">September</option>
+               <option value="October">October</option>
+               <option value="November">November</option>
+               <option value="December">December</option>
+            </select>
+
+            <label><b>Engine Efficiency (%):</b></label>
+            <input type="number" name="engine_efficiency" placeholder="Efficiency(70 % -95 %)" step="any" required>
+
+            <label><b>Fuel Consumption(litres):</b></label>
+            <input type="number" name="fuel_consumption" placeholder="Fuel_consumption(237 l - 24648 l)" step="any" required>
+
+            <label><b>Ship Type</b></label>
+            <select name="ship_type" required>
+               <option value="">Select Ship Type</option>
+               <option value="tanker ship">Tanker Ship</option>
+               <option value="fishing trawler">Fishing Trawler</option>
+               <option value="surfer boat">Surfer Boat</option>
+               <option value="oil service boat">Oil Service Boat</option>
+            </select>
+
+            <button type="submit">Predict CO2</button>
+         </form>
+      </div>
+
+      <!-- Right column: Info Box -->
+      <div id="seasonInfo" class="result-card">
+         <h3>Season Guide</h3>
+         <div class="season-card summer">Summer: Nov – Mar</div>
+         <div class="season-card spring">Spring: Apr – Jun</div>
+         <div class="season-card autumn">Autumn: Jul – Oct</div>
+
+      </div>
+   </div>
+
+   <div id="co2Result" class="result-card"></div>
+   <canvas id="co2PredictionChart"></canvas>
+</section>
+
+<!-- ANALYTICS -->
+<section id="analytics" class="content-section">
+<h2> Distance VS Fuel</h2>
+<canvas id="fuelDistanceChart"></canvas>
+<h2> CO2 Consumption</h2>
+<canvas id="co2Chart"></canvas>
+<!-- Time & Trend -->
+<h2>Fuel Consumption by Month</h2>
+<canvas id="fuelByMonthChart"></canvas>
+<h2>CO2 Emission by Month</h2>
+<canvas id="co2ByMonthChart"></canvas>
+<h2>Distance by Month</h2>
+<canvas id="distanceByMonthChart"></canvas>
+
+<!-- Weather Impact -->
+<h2>Fuel Consumption by Weather</h2>
+<canvas id="fuelByWeatherChart"></canvas>
+<h2>CO2 Emission by Weather</h2>
+<canvas id="co2ByWeatherChart"></canvas>
+
+<!-- Efficiency & Performance -->
+<h2>Engine Efficiency Histogram</h2>
+<canvas id="efficiencyHistogram"></canvas>
+<h2>Engine Efficiency Vs Fuel Consumption</h2>
+<canvas id="efficiencyVsFuelChart"></canvas>
+<h2>Engine Efficiency Vs CO2 Emission</h2>
+<canvas id="efficiencyVsCO2Chart"></canvas>
+
+
+<!-- Heatmap (optional: use table or custom plugin) -->
+<h2>Route vs Month Fuel Consumption</h2>
+<canvas id="fuelByRouteMonthHeatmap"></canvas>
+
+</section>
+<!-- OUTLIERS -->
+<section id="outliers" class="content-section">
+    <h2>🔍 Outlier Analysis</h2>
+    <button onclick="analyzeOutliers()" class="analyze-btn">Analyze Outliers</button>
+    
+    <!-- Table stays on top -->
+    <div class="row">
+        <div id="outlierTable" class="result-card"></div>
+    </div>
+    
+    <!-- LARGER Chart - MOVED DOWN with spacing
+    <div style="margin-top: 30px; padding: 20px;">
+        <canvas id="outlierBoxplot" width="800" height="450" style="max-width: 100%; height: 450px !important;"></canvas>
+    </div> -->
+</section>
+
+
+
+<!-- COMPLETE SECTION after outliers section -->
+<section id="performance" class="content-section">
+    <div class="section-header">
+        <h2>🤖 Model Performance Dashboard</h2>
+        <p>Real-time evaluation of Fuel Optimization & CO2 Prediction models</p>
+    </div>
+    
+    <!-- Load Button -->
+    <div style="text-align: center; margin: 20px 0;">
+        <button onclick="loadModelMetrics()" class="analyze-btn">
+            🔄 Analyze Model Performance
+        </button>
+    </div>
+    
+    <!-- Model Cards Row -->
+    <div class="row">
+        <!-- Fuel Model Card -->
+        <div class="col-md-6">
+            <div id="fuelModelCard" class="metric-card">
+                <div class="metric-header">
+                    <h3>⛽ Fuel Optimization Model</h3>
+                    <span class="model-status" id="fuelStatus">Loading...</span>
+                </div>
+                <div id="fuelMetrics" class="metrics-list">
+                    <div class="metric-item">
+                        <span class="metric-label">R² Score:</span>
+                        <span class="metric-value" id="fuelR2">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">RMSE:</span>
+                        <span class="metric-value" id="fuelRMSE">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">MAE:</span>
+                        <span class="metric-value" id="fuelMAE">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Test Samples:</span>
+                        <span class="metric-value" id="fuelSamples">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CO2 Model Card -->
+        <div class="col-md-6">
+            <div id="co2ModelCard" class="metric-card">
+                <div class="metric-header">
+                    <h3>🌿 CO2 Emissions Model</h3>
+                    <span class="model-status" id="co2Status">Loading...</span>
+                </div>
+                <div id="co2Metrics" class="metrics-list">
+                    <div class="metric-item">
+                        <span class="metric-label">R² Score:</span>
+                        <span class="metric-value" id="co2R2">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">RMSE:</span>
+                        <span class="metric-value" id="co2RMSE">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">MAE:</span>
+                        <span class="metric-value" id="co2MAE">--</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Test Samples:</span>
+                        <span class="metric-value" id="co2Samples">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Performance Charts -->
+    <div class="chart-section" style="margin-top: 40px;">
+        <h3>📈 Predictions vs Actual Values</h3>
+        <canvas id="performanceChart" width="1200" height="500" style="max-height: 500px;"></canvas>
+    </div>
+    
+    <!-- Summary Table -->
+    <div class="summary-table" style="margin-top: 30px;">
+        <h3>📋 Model Comparison</h3>
+        <table id="modelComparisonTable">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Fuel Model</th>
+                    <th>CO2 Model</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>R² Score</strong></td>
+                    <td id="tableFuelR2">--</td>
+                    <td id="tableCo2R2">--</td>
+                </tr>
+                <tr>
+                    <td><strong>RMSE</strong></td>
+                    <td id="tableFuelRMSE">--</td>
+                    <td id="tableCo2RMSE">--</td>
+                </tr>
+                <tr>
+                    <td><strong>MAE</strong></td>
+                    <td id="tableFuelMAE">--</td>
+                    <td id="tableCo2MAE">--</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- DATASET -->
+<section id="dataset" class="content-section">
+<table id="datasetTable">
+<thead>
+<tr><th>ID</th><th>Type</th><th>Route ID</th><th>Month</th><th>Distance</th><th>Fuel Type</th><th>Fuel Consumption</th><th>CO2</th><th>Weather Conditions</th><th>Engine Efficiency</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+</section>
+
+</div>
+</div>
+
+<script src="ship.js"></script>
+</body>
+</html>
